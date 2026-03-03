@@ -10,8 +10,15 @@ int main(int argc, char *argv[])
     // Initialize
     UnitreeLidarReader *lreader = createUnitreeLidarReader();
 
-    std::string lidar_ip = "192.168.1.62";
-    std::string local_ip = "192.168.1.2";
+    if (argc != 3)
+    {
+        printf("Usage: %s <local_ip> <lidar_ip>\n", argv[0]);
+        printf("Example: %s 192.168.50.15 192.168.50.51\n", argv[0]);
+        exit(-1);
+    }
+
+    std::string local_ip = argv[1];
+    std::string lidar_ip = argv[2];
 
     unsigned short lidar_port = 6101;
     unsigned short local_port = 6201;

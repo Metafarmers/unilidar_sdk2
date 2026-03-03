@@ -2,9 +2,15 @@ import os
 import subprocess
 
 from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument
+from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
 def generate_launch_description():
+
+    local_ip_arg = DeclareLaunchArgument('local_ip', default_value='192.168.50.15')
+    lidar_ip_arg = DeclareLaunchArgument('lidar_ip', default_value='192.168.50.51')
+
     # Run unitree lidar
     node1 = Node(
         package='unitree_lidar_ros2',
@@ -12,7 +18,7 @@ def generate_launch_description():
         name='unitree_lidar_ros2_node',
         output='screen',
         parameters= [
-                
+
                 {'initialize_type': 2},
                 {'work_mode': 0},
                 {'use_system_timestamp': True},
@@ -20,14 +26,11 @@ def generate_launch_description():
                 {'range_max': 100.0},
                 {'cloud_scan_num': 18},
 
-                {'serial_port': '/dev/ttyACM0'},
-                {'baudrate': 4000000},
-
                 {'lidar_port': 6101},
-                {'lidar_ip': '192.168.1.62'},
+                {'lidar_ip': LaunchConfiguration('lidar_ip')},
                 {'local_port': 6201},
-                {'local_ip': '192.168.1.2'},
-                
+                {'local_ip': LaunchConfiguration('local_ip')},
+
                 {'cloud_frame': "unilidar_lidar"},
                 {'cloud_topic': "unilidar/cloud"},
                 {'imu_frame': "unilidar_imu"},
@@ -46,4 +49,4 @@ def generate_launch_description():
         arguments=['-d', rviz_config_file],
         output='log'
     )
-    return LaunchDescription([node1, rviz_node])
+    return LaunchDescription([local_ip_arg, lidar_ip_arg, node1, rviz_node])

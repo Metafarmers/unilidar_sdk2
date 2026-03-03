@@ -77,23 +77,43 @@ The common usage mode is standard FOV + 3D measurement + enable IMU + power on s
 
 The default factory lidar work mode is 0, i.e., Ethernet communication mode.
 
-### 3.3 Running with Ethernet
+### 3.3 Changing LiDAR IP Address
+
+The default factory IP configuration is:
+- LiDAR IP: `192.168.1.62`
+- Host PC IP: `192.168.1.2`
+
+To change the LiDAR's IP address, connect the LiDAR to the computer via USB (serial) and run:
+```bash
+../bin/set_ip_address <pc_ip> <lidar_ip>
+```
+
+For example, to set the LiDAR to `192.168.50.51` and the host PC to `192.168.50.15`:
+```bash
+../bin/set_ip_address 192.168.50.15 192.168.50.51
+```
+
+After running, **reboot the LiDAR (power off/on)** for the new IP to take effect.
+
+### 3.4 Running with Ethernet
 
 The sample program for running the LiDAR with Ethernet connection is: `example_lidar_udp.cpp`.
 
-First, connect your LiDAR to the computer with an Ethernet cable, then confirm that the corresponding network card of your computer is configured to the default target IP address of the LiDAR:
+First, connect your LiDAR to the computer with an Ethernet cable, then configure your computer's network interface to match the LiDAR's target IP address.
+
+Run the sample program with your PC and LiDAR IP addresses:
 ```bash
-192.168.1.2
+../bin/example_lidar_udp <local_ip> <lidar_ip>
 ```
 
-Then, run the sample program:
+For example:
 ```bash
-../bin/example_lidar_udp
+../bin/example_lidar_udp 192.168.50.15 192.168.50.51
 ```
 
 The sample output is as follows:
 ```
-$ ../bin/example_lidar_udp 
+$ ../bin/example_lidar_udp 192.168.50.15 192.168.50.51
 Unilidar initialization succeed!
 set Lidar work mode to: 0
 lidar hardware version = 1.1.1.1
@@ -132,9 +152,9 @@ A Cloud msg is parsed!
 	  ...
 ```
 
-If you need to modify the default IP address of the LiDAR, you can refer to the user manual to use our host computer to make the changes.
+If you need to modify the IP address of the LiDAR, refer to section [3.3](#33-changing-lidar-ip-address).
 
-### 3.4 Running with Serial Port
+### 3.5 Running with Serial Port
 
 Note that the LiDAR is shipped with Ethernet communication mode by default. If you have not yet switched the communication mode to serial communication mode, you will need to use an Ethernet connection to communicate with the LiDAR first, so that you can then switch its communication method to serial communication mode. You can use our host computer to make the switch, or you can also refer to section [4.2], use the default Ethernet communication example program `example_lidar_udp.cpp` to communicate with the lidar first, and set the lidar work mode to serial communication mode (`workMode=8`), then power off and restart the LiDAR.
 
@@ -289,12 +309,18 @@ colcon build
 
 ### 5.4 Running
 
-Run:
+Run with default IP settings (`local_ip:=192.168.50.15`, `lidar_ip:=192.168.50.51`):
 
 ```bash
 source install/setup.bash
 
 ros2 launch unitree_lidar_ros2 launch.py
+```
+
+To specify custom IP addresses:
+
+```bash
+ros2 launch unitree_lidar_ros2 launch.py local_ip:=<your_pc_ip> lidar_ip:=<your_lidar_ip>
 ```
 
 In the Rviz window, you will see our LiDAR point cloud as follows:
