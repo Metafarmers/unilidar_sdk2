@@ -7,16 +7,13 @@
 int main(int argc, char *argv[])
 {
 
-    // Initialize
+    // Initialize via Serial (USB)
     UnitreeLidarReader *lreader = createUnitreeLidarReader();
 
-    std::string lidar_ip = "192.168.1.62";
-    std::string local_ip = "192.168.1.2";
+    std::string port = "/dev/ttyACM0";
+    uint32_t baudrate = 4000000;
 
-    unsigned short lidar_port = 6101;
-    unsigned short local_port = 6201;
-
-    if (lreader->initializeUDP(lidar_port, lidar_ip, local_port, local_ip))
+    if (lreader->initializeSerial(port, baudrate))
     {
         printf("Unilidar initialization failed! Exit here!\n");
         exit(-1);
@@ -28,17 +25,37 @@ int main(int argc, char *argv[])
 
     sleep(1);
 
+    // Parse IP arguments: set_ip_address <pc_ip> <lidar_ip>
+    if (argc != 3)
+    {
+        printf("Usage: %s <pc_ip> <lidar_ip>\n", argv[0]);
+        printf("Example: %s 192.168.50.15 192.168.50.51\n", argv[0]);
+        exit(-1);
+    }
+
+    uint8_t pc_octets[4], lidar_octets[4];
+    if (sscanf(argv[1], "%hhu.%hhu.%hhu.%hhu",
+               &pc_octets[0], &pc_octets[1], &pc_octets[2], &pc_octets[3]) != 4 ||
+        sscanf(argv[2], "%hhu.%hhu.%hhu.%hhu",
+               &lidar_octets[0], &lidar_octets[1], &lidar_octets[2], &lidar_octets[3]) != 4)
+    {
+        printf("Invalid IP address format!\n");
+        exit(-1);
+    }
+
+    printf("Setting PC IP: %s, Lidar IP: %s\n", argv[1], argv[2]);
+
     // Set lidar ip address
     LidarIpAddressConfig config;
-    config.lidar_ip[0] = 192;
-    config.lidar_ip[1] = 168;
-    config.lidar_ip[2] = 123;
-    config.lidar_ip[3] = 110;
+    config.lidar_ip[0] = lidar_octets[0];
+    config.lidar_ip[1] = lidar_octets[1];
+    config.lidar_ip[2] = lidar_octets[2];
+    config.lidar_ip[3] = lidar_octets[3];
 
-    config.user_ip[0] = 192;
-    config.user_ip[1] = 168;
-    config.user_ip[2] = 123;
-    config.user_ip[3] = 120;
+    config.user_ip[0] = pc_octets[0];
+    config.user_ip[1] = pc_octets[1];
+    config.user_ip[2] = pc_octets[2];
+    config.user_ip[3] = pc_octets[3];
 
     config.lidar_port = 6101;
     config.user_port = 6201;
