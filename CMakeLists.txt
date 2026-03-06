@@ -25,21 +25,21 @@ find_package(tf2_ros REQUIRED)
 find_package(sensor_msgs REQUIRED)
 
 include_directories(
-  ${PCL_INCLUDE_DIRS} 
   include
-  ../../../unitree_lidar_sdk/include
+  ${PCL_INCLUDE_DIRS} 
+  unitree_lidar_sdk/include
 )
 
 link_directories(
+  unitree_lidar_sdk/lib/${CMAKE_SYSTEM_PROCESSOR}
   ${PCL_LIBRARY_DIRS}
-  ../../../unitree_lidar_sdk/lib/${CMAKE_SYSTEM_PROCESSOR}
 )
 
 add_definitions(${PCL_DEFINITIONS})
 
 add_executable(unitree_lidar_ros2_node src/unitree_lidar_ros2_node.cpp)
 
-target_link_libraries( unitree_lidar_ros2_node
+target_link_libraries(unitree_lidar_ros2_node
   ${Boost_SYSTEM_LIBRARY}
   ${PCL_LIBRARIES}
   libunilidar_sdk2.a

@@ -19,8 +19,8 @@ def generate_launch_description():
         output='screen',
         parameters= [
 
-                {'initialize_type': 2},
-                {'work_mode': 0},
+                {'initialize_type': 1},
+                {'work_mode': 8},
                 {'use_system_timestamp': True},
                 {'range_min': 0.0},
                 {'range_max': 100.0},
