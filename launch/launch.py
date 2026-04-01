@@ -31,9 +31,9 @@ def generate_launch_description():
                 {'local_port': 6201},
                 {'local_ip': LaunchConfiguration('local_ip')},
 
-                {'cloud_frame': "front_3d_lidar_optimal_link"},
+                {'cloud_frame': "front_3d_lidar_link"},
                 {'cloud_topic': "front_3d/points"},
-                {'imu_frame': "front_3d_lidar_link"},
+                {'imu_frame': "front_3d_lidar_imu_link"},
                 {'imu_topic': "front_3d/imu"},
                 ]
     )
