@@ -192,7 +192,7 @@ void UnitreeLidarSDKNode::timer_callback()
             pub_imu_->publish(imuMsg);
 
             // publish tf from initial imu to real-time imu
-            geometry_msgs::msg::TransformStamped transformStamped;
+            // geometry_msgs::msg::TransformStamped transformStamped;
             // transformStamped.header.stamp = this->now(); // 使用当前时间
             // transformStamped.header.frame_id = imu_frame_ + "_initial"; // 父坐标系
             // transformStamped.child_frame_id = imu_frame_; // 子坐标系
@@ -206,16 +206,16 @@ void UnitreeLidarSDKNode::timer_callback()
             // broadcaster_->sendTransform(transformStamped);
 
             // publish tf from imu to lidar
-            transformStamped.header.frame_id = imu_frame_; // 父坐标系
-            transformStamped.child_frame_id = cloud_frame_; // 子坐标系
-            transformStamped.transform.translation.x = 0.007698;
-            transformStamped.transform.translation.y = 0.014655;
-            transformStamped.transform.translation.z = -0.00667;
-            transformStamped.transform.rotation.x = 0;
-            transformStamped.transform.rotation.y = 0;
-            transformStamped.transform.rotation.z = 0;
-            transformStamped.transform.rotation.w = 1;
-            broadcaster_->sendTransform(transformStamped);
+            // transformStamped.header.frame_id = imu_frame_; // 父坐标系
+            // transformStamped.child_frame_id = cloud_frame_; // 子坐标系
+            // transformStamped.transform.translation.x = 0.007698;
+            // transformStamped.transform.translation.y = 0.014655;
+            // transformStamped.transform.translation.z = -0.00667;
+            // transformStamped.transform.rotation.x = 0;
+            // transformStamped.transform.rotation.y = 0;
+            // transformStamped.transform.rotation.z = 0;
+            // transformStamped.transform.rotation.w = 1;
+            // broadcaster_->sendTransform(transformStamped);
         }
     }
     else if (result == LIDAR_POINT_DATA_PACKET_TYPE)
